@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SysRamson | EndeavourOS Showcase</title>
+    <style>
+        
+        :root {
+            --base: #1e1e2e;
+            --mantle: #181825;
+            --crust: #11111b;
+            --text: #cdd6f4;
+            --subtext0: #a6adc8;
+            --miku-cyan: #94e2d5; /* Cian */
+            --blue: #89b4fa;
+        }
+
+        body {
+            background-color: var(--crust);
+            color: var(--text);
+            font-family: 'Lexend', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--base);
+            border: 2px solid var(--miku-cyan);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 900px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(148, 226, 213, 0.3); /* Glow effect */
+        }
+
+        h1 {
+            color: var(--miku-cyan);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--subtext0);
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .screenshot-wrapper {
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--subtext0);
+        }
+
+        .screenshot-wrapper img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .details {
+            text-align: left;
+            background-color: var(--mantle);
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: 'JetBrainsMono NFP', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--subtext0);
+        }
+
+        .details strong {
+            color: var(--blue);
+        }
+
+        .links {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .link-btn {
+            text-decoration: none;
+            color: var(--base);
+            background-color: var(--miku-cyan);
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background-color: var(--blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(137, 180, 250, 0.4);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>SysRamson's Desktop</h1>
+        <p class="subtitle">EndeavourOS + Hyprland </p>
+        
+        <div class="screenshot-wrapper">
+            <img src="https://i.delirius.store/image/ueem9k2t1b8u.png" alt="SysRamson Setup Screenshot">
+        </div>
+
+        <div class="details">
+            <strong>OS:</strong> EndeavourOS (Arch-based)<br>
+            <strong>WM:</strong> Hyprland (Wayland Tiling)<br>
+            <strong>Bar:</strong> Waybar (Customized 'Miku Capsules' config)<br>
+            <strong>Theme:</strong> Catppuccin Mocha (Cyan Accents)<br>
+            <strong>Audio:</strong> Cava (fixed with sleep_timer)<br>
+            <strong>Terminal:</strong> Kitty<br>
+            <strong>HW:</strong> Ryzen 5 3500U | Radeon Vega 8 Graphics
+        </div>
+
+        <div class="links">
+            <a href="https://github.com/Ramiringuiss" class="link-btn" target="_blank">Mis Dotfiles</a>
+            <!-- <a href="https://discord.gg/TU_INVITACION" class="link-btn" target="_blank">Mi Grupo de Discord</a> -->
+        </div>
+    </body>
+    </html>
