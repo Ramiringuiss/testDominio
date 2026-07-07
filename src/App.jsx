@@ -57,7 +57,7 @@ function WelcomeOverlay({ onDismiss }) {
             exit={{ opacity: 0, filter: 'blur(10px)' }}
             transition={{ duration: 0.8 }}
             className="fixed inset-0 flex flex-col items-center justify-center"
-            style={{ zIndex: 100, background: 'rgba(10, 10, 20, 0.97)' }}
+            style={{ zIndex: 100, background: 'rgba(10, 8, 20, 0.7)', backdropFilter: 'blur(2px)' }}
             onClick={onDismiss}
         >
             <motion.div
@@ -157,8 +157,34 @@ export default function App() {
 
     return (
         <div className="relative w-full h-screen overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
-            {/* Wallpaper */}
-            <div className="wallpaper" />
+            {/* Video Wallpaper */}
+            <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                    position: 'fixed',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    zIndex: 0,
+                    filter: 'brightness(0.55)',
+                }}
+            >
+                <source src="https://i.delirius.store/video/i9juujxc33ua.mp4" type="video/mp4" />
+            </video>
+            {/* Dark overlay for readability */}
+            <div
+                style={{
+                    position: 'fixed',
+                    inset: 0,
+                    background: 'rgba(10, 8, 20, 0.45)',
+                    zIndex: 0,
+                    pointerEvents: 'none',
+                }}
+            />
 
             {/* Particles */}
             <Particles />
