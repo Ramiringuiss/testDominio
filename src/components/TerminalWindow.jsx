@@ -84,7 +84,7 @@ export default function TerminalWindow() {
             ref={scrollRef}
             className="h-full overflow-y-auto terminal-content"
             style={{
-                background: 'rgba(10, 10, 20, 0.9)',
+                background: 'rgba(14, 14, 24, 0.85)',
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: 12.5,
                 lineHeight: 1.6,

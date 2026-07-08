@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function Clock() {
     const [time, setTime] = useState(new Date())
@@ -33,7 +33,117 @@ function Clock() {
     )
 }
 
-const BATTERY_LEVEL = 87
+// Volume icon that switches between muted, low, and high
+function VolumeIcon({ volume }) {
+    if (volume === 0) {
+        // Muted: speaker with X
+        return (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+        )
+    }
+    if (volume < 50) {
+        // Low: speaker with one wave
+        return (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+        )
+    }
+    // High: speaker with two waves
+    return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" />
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+    )
+}
+
+function VolumeControl({ volume, onVolumeChange }) {
+    const [show, setShow] = useState(false)
+
+    return (
+        <div
+            className="relative flex items-center"
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+        >
+            {/* Icon button */}
+            <button
+                className="transition-opacity hover:opacity-100 opacity-70 flex items-center justify-center"
+                style={{ color: volume === 0 ? 'var(--pink)' : 'var(--subtext0)', cursor: 'pointer' }}
+                onClick={() => onVolumeChange(volume === 0 ? 50 : 0)}
+                title={`Volume: ${volume}%`}
+            >
+                <VolumeIcon volume={volume} />
+            </button>
+
+            {/* Glassmorphism slider panel */}
+            <AnimatePresence>
+                {show && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 4, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                        transition={{ duration: 0.15, ease: 'easeOut' }}
+                        style={{
+                            position: 'absolute',
+                            top: '110%',
+                            right: 0,
+                            padding: '8px 12px',
+                            borderRadius: 12,
+                            background: 'rgba(17, 17, 27, 0.72)',
+                            backdropFilter: 'blur(20px)',
+                            WebkitBackdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(148, 226, 213, 0.18)',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            width: 160,
+                            zIndex: 200,
+                        }}
+                    >
+                        <VolumeIcon volume={volume} />
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={volume}
+                            onChange={e => onVolumeChange(Number(e.target.value))}
+                            style={{
+                                flex: 1,
+                                appearance: 'none',
+                                WebkitAppearance: 'none',
+                                height: 4,
+                                borderRadius: 9999,
+                                background: `linear-gradient(to right, var(--cyan) ${volume}%, rgba(88,91,112,0.4) ${volume}%)`,
+                                outline: 'none',
+                                cursor: 'pointer',
+                                accentColor: 'var(--cyan)',
+                            }}
+                        />
+                        <span style={{
+                            fontSize: 10,
+                            fontFamily: 'JetBrains Mono, monospace',
+                            color: 'var(--subtext0)',
+                            minWidth: 24,
+                            textAlign: 'right',
+                        }}>
+                            {volume}
+                        </span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    )
+}
+
 const WifiIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M5 12.55a11 11 0 0 1 14.08 0" />
@@ -70,7 +180,9 @@ const BatteryIcon = ({ level }) => (
     </div>
 )
 
-export default function Topbar({ workspaces, openWindow, isOpen, focusedId }) {
+const BATTERY_LEVEL = 87
+
+export default function Topbar({ workspaces, openWindow, isOpen, focusedId, volume, onVolumeChange }) {
     return (
         <motion.div
             initial={{ y: -60, opacity: 0 }}
@@ -138,6 +250,7 @@ export default function Topbar({ workspaces, openWindow, isOpen, focusedId }) {
 
                 <WifiIcon />
                 <BatteryIcon level={BATTERY_LEVEL} />
+                <VolumeControl volume={volume} onVolumeChange={onVolumeChange} />
 
                 <a
                     href="https://github.com/Ramiringuiss"

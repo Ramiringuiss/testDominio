@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Topbar from './components/Topbar'
 import Window from './components/Window'
@@ -148,20 +148,56 @@ export default function App() {
     } = useWindowManager()
 
     const [welcomed, setWelcomed] = useState(false)
+    const [volume, setVolume] = useState(0)
+    const videoRef = useRef(null)
+    const fadeIntervalRef = useRef(null)
+
+    // Sync volume state → video element whenever it changes externally (slider)
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.volume = volume / 100
+        }
+    }, [volume])
 
     const handleWelcomeDismiss = useCallback(() => {
         setWelcomed(true)
         // Auto-open terminal after welcome
         setTimeout(() => openWindow('terminal'), 400)
+
+        // Fade audio in from 0 → 50 over 3 seconds
+        const target = 50
+        const steps = 30
+        const intervalMs = 3000 / steps
+        const increment = target / steps
+        let current = 0
+
+        fadeIntervalRef.current = setInterval(() => {
+            current += increment
+            if (current >= target) {
+                current = target
+                clearInterval(fadeIntervalRef.current)
+                fadeIntervalRef.current = null
+            }
+            setVolume(Math.round(current))
+        }, intervalMs)
     }, [openWindow])
+
+    // Allow slider to cancel the fade-in
+    const handleVolumeChange = useCallback((newVol) => {
+        if (fadeIntervalRef.current) {
+            clearInterval(fadeIntervalRef.current)
+            fadeIntervalRef.current = null
+        }
+        setVolume(newVol)
+    }, [])
 
     return (
         <div className="relative w-full h-screen overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
             {/* Video Wallpaper */}
             <video
+                ref={videoRef}
                 autoPlay
                 loop
-                muted
                 playsInline
                 style={{
                     position: 'fixed',
@@ -195,6 +231,8 @@ export default function App() {
                 openWindow={openWindow}
                 isOpen={isOpen}
                 focusedId={focusedId}
+                volume={volume}
+                onVolumeChange={handleVolumeChange}
             />
 
             {/* Desktop area */}
